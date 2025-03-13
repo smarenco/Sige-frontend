@@ -1,6 +1,7 @@
 import api from "./Api";
 import { ACCESS_TOKEN, CONFIG, MENU, PARAMS, SESSION, USER } from "../common/consts";
 import User from "../models/User";
+import { Modal } from "antd";
 
 export const resetPassword = (token, new_password, repeat_password) => {
     return api
@@ -18,19 +19,27 @@ export const login = async (username, password) => {
     localStorage.removeItem(USER);
     localStorage.removeItem(SESSION);
     localStorage.removeItem(CONFIG);
-
-    const { response } = await api.post('/auth/login', { username, password })
-
-    localStorage.setItem(ACCESS_TOKEN, response.data.token);
-    api.defaults.headers.common['X-US-AUTH-TOKEN'] = response.data.token;
-    localStorage.setItem('token-init-date', new Date().getTime());
-    localStorage.setItem(USER, JSON.stringify(response.data.user));
-    localStorage.setItem(MENU, JSON.stringify(response.data.menu));
-    if (response.menu?.length > 0) {
-        let menu = response.menu;
-        localStorage.setItem(MENU, JSON.stringify(menu));
+    try {
+        const { response } = await api.post('/auth/login', { username, password })
+        localStorage.setItem(ACCESS_TOKEN, response.data.token);
+        api.defaults.headers.common['X-US-AUTH-TOKEN'] = response.data.token;
+        localStorage.setItem('token-init-date', new Date().getTime());
+        localStorage.setItem(USER, JSON.stringify(response.data.user));
+        localStorage.setItem(MENU, JSON.stringify(response.data.menu));
+        if (response.menu?.length > 0) {
+            let menu = response.menu;
+            localStorage.setItem(MENU, JSON.stringify(menu));
+        }
+        window.location.href = '/';
+    } catch({ status, response }) {
+        if (status !== 200) {
+            Modal.error({
+                title: 'Error al iniciar sesión, por favor verificar correo electrónico y/o contraseña',
+                content: <p>{response?.error}</p>,
+                okText: 'Aceptar',
+            });
+        }
     }
-    window.location.href = '/'; 
 }
 
 /**
@@ -63,6 +72,8 @@ export const loginByToken = token => {
         });
 }
 
+export const sendEmail = (email) => api.post('auth/recovery-password', { email });
+
 export const forceLogout = () => {
     delete api.defaults.headers.common['X-US-AUTH-TOKEN'];
     localStorage.removeItem(ACCESS_TOKEN);
@@ -70,7 +81,9 @@ export const forceLogout = () => {
     localStorage.removeItem(SESSION);
     localStorage.removeItem(PARAMS);
     localStorage.removeItem(CONFIG);
-    window.location.href = '/auth/login';
+    if (['/auth/login'].indexOf(window.location.pathname) === -1) {//SI NO ESTA EN AUTH/LOGIN LO MANDO PARA AHI
+        window.location.href = '/auth/login';
+    }
 }
 
 export const isLogged = () => {

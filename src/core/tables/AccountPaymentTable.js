@@ -82,7 +82,7 @@ export const AccountPaymentTable = ({ viewAll, confirmLoading, data, onChangeSta
                 width: 150,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        {viewAll && <Button size='small' type='primary' onClick={e => onModalChangeState(record)} style={{ marginRight: 10 }}>Aprobar/Rechazar</Button>}&nbsp;
+                        {/* {viewAll && <Button size='small' type='primary' onClick={e => onModalChangeState(record)} style={{ marginRight: 10 }}>Aprobar/Rechazar</Button>}&nbsp; */}
                         {record.document_name && <DownloadOutlined onClick={e => downloadDocument(record.document_name)} style={{ fontSize:18, marginRight: 10 }} title='Descargar documento' />}&nbsp;<EditOutlined onClick={e => onEditClick(record.id)} />
                     </div>
                 ),

@@ -10,6 +10,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import { paymentMethodsCombo } from '../services/PaymentMethodsService';
 import { DDMMYYYY } from '../common/consts';
 import dayjs from 'dayjs';
+import Icon from '@ant-design/icons';
 
 export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName, onInputChangeByObject }) => {    
 
@@ -19,8 +20,17 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
     const [students, setStudents ] = useState([]);
     const [loadingCourses, setLoadingCourses ] = useState([]);
     const [courses, setCourses ] = useState([]);
-    const [cuotes, setCuotes ] = useState([]);
+    const [typingTimeout, setTypingTimeout] = useState(0);
+    const [searchUser, setSearchUser ] = useState([]);
+    const [openSelectUser, setOpenSelectUser] = useState(false);
 
+    useEffect(() => {
+        // Reabre el menú cuando se actualicen los datos de `students` y `openSelectUser` es true
+        if (students.length > 0 && openSelectUser) {
+            setOpenSelectUser(true);
+        }
+    }, [students]);
+    
     const fetchCourses = async () => {
         setLoadingCourses(true);
         try {
@@ -37,10 +47,10 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
         }
     };
 
-    const fetchStudents = async () => {
+    const fetchStudents = async (Search) => {
         setLoadingStudents(true);
         try {
-            const students = await userCombo({ User_type: 'student', State: 1});
+            const students = await userCombo({ Search, User_type: 'student', State: 1});
             setStudents(students);
             setLoadingStudents(false);
         } catch(err) {
@@ -125,18 +135,39 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                     <LayoutH>
                         <Form.Item label={`${!view ? '*' : ''} Estudiante`} labelAlign='left' span={15}>
                             <Select
-                                allowClear
+                                key={`${students.length}`}
                                 showSearch
-                                disabled={view || confirmLoading || loadingStudents}
+                                disabled={confirmLoading}
                                 loading={loadingStudents}
                                 value={formState.student_id}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                onChange={student_id => onInputChangeByName('student_id', student_id)}
-                                > 
-                                    {students.map(student => 
-                                        <Select.Option value={student.id} key={student.id}>{student.names} {student.lastnames} - {student.document}</Select.Option>
-                                        )}
-                                </Select>
+                                open={openSelectUser}
+                                onDropdownVisibleChange={visible => setOpenSelectUser(visible)}
+                                onSearch={searchUser => {
+                                    setSearchUser(searchUser);
+                                    if (searchUser?.length > 2) {
+                                        if (typingTimeout) {
+                                            clearTimeout(typingTimeout);
+                                        }
+                                        setTypingTimeout(() => setTimeout(() => fetchStudents(searchUser), 1000));
+                                    } else {
+                                        onInputChangeByName('student_id', undefined);
+                                    }
+                                }}
+                                notFoundContent={
+                                    searchUser?.length > 2 && students.length === 0 && !loadingStudents
+                                        ? <>No hay resultados</>
+                                        : searchUser?.length > 2 && loadingStudents
+                                            ? <>Buscando...</>
+                                            : <><Icon type="search" /> Comience a escribir para buscar</>
+                                }
+                                onSelect={student_id => onInputChangeByName('student_id', student_id)}
+                            >
+                                {students.map(student => 
+                                    <Select.Option value={student.id} key={student.id}>
+                                        {`${student.names} ${student.lastnames} - ${student.document}`}
+                                    </Select.Option>
+                                )}
+                            </Select>
                         </Form.Item>
                         <Form.Item label={`${!view ? '*' : ''} Metodo de pago`} labelAlign='left' span={9}>
                             <Select 

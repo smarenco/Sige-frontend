@@ -88,7 +88,7 @@ export default class User {
     /**
      * @type {boolean}
      */
-    work_in_Area_similar = false;
+    work_in_similar_area = false;
 
     /**
      * @type {boolean}

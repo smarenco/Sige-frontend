@@ -86,11 +86,11 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
         }
 
         if(formState?.student_documental_category_id){
-            fetchStudentDocumentsCategoryDocuments(formState?.documental_category_id);
+            fetchStudentDocumentsCategoryDocuments(formState?.student_documental_category_id);
         }
 
         if(formState?.teacher_documental_category_id){
-            fetchTeacherDocumentsCategoryDocuments(formState?.documental_category_id);
+            fetchTeacherDocumentsCategoryDocuments(formState?.teacher_documental_category_id);
         }
 
       }, []);
@@ -134,52 +134,56 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
             label: 'Documentos Estudiantes', 
             key: 'info_documents_stu', 
             children:
-                <LayoutH>
-                    <Form.Item label={`Categoria documentos estudiantes`} labelAlign='left' span={12}>
-                        <Select 
-                            allowClear
-                            showSearch
-                            disabled={view || confirmLoading || loadingStudentDocumentCategories}
-                            loading={loadingStudentDocumentCategories}
-                            value={formState?.student_documental_category_id}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            onChange={(student_documental_category_id) => {
-                                onInputChangeByName('student_documental_category_id', student_documental_category_id);
-                                fetchStudentDocumentsCategoryDocuments(student_documental_category_id);
-                            }}
-                        > 
-                            {student_documental_categories.map(documental_category => 
-                                <Select.Option value={documental_category.id} key={documental_category.id}>{documental_category.name}</Select.Option>
-                                )}
-                        </Select>
-                    </Form.Item>
-                    {loadingStudentDocuments ? <Loading /> : <DocumentCategoryDocumentTable data={studentDocuments} view={true} />}
-                </LayoutH>
+                <>
+                    <LayoutH>
+                        <Form.Item label={`Categoria documentos estudiantes`} labelAlign='left' span={12}>
+                            <Select 
+                                allowClear
+                                showSearch
+                                disabled={view || confirmLoading || loadingStudentDocumentCategories}
+                                loading={loadingStudentDocumentCategories}
+                                value={formState?.student_documental_category_id}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                onChange={(student_documental_category_id) => {
+                                    onInputChangeByName('student_documental_category_id', student_documental_category_id);
+                                    fetchStudentDocumentsCategoryDocuments(student_documental_category_id);
+                                }}
+                            > 
+                                {student_documental_categories.map(documental_category => 
+                                    <Select.Option value={documental_category.id} key={documental_category.id}>{documental_category.name}</Select.Option>
+                                    )}
+                            </Select>
+                        </Form.Item>
+                    </LayoutH>
+                    <DocumentCategoryDocumentTable data={studentDocuments} view={true} loading={loadingStudentDocuments} />
+                </>
         }, {
             label: 'Documentos Profesores', 
             key: 'info_documents', 
             children:
-                <LayoutH>
-                    <Form.Item label={`Categoria documentos profesores`} labelAlign='left' span={12}>
-                        <Select 
-                            allowClear
-                            showSearch
-                            disabled={view || confirmLoading || loadingTeacherDocumentCategories}
-                            loading={loadingTeacherDocumentCategories}
-                            value={formState?.teacher_documental_category_id}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            onChange={(teacher_documental_category_id) => {
-                                onInputChangeByName('teacher_documental_category_id', teacher_documental_category_id);
-                                fetchTeacherDocumentsCategoryDocuments(teacher_documental_category_id);
-                            }}
-                        > 
-                            {teacher_documental_categories.map(documental_category => 
-                                <Select.Option value={documental_category.id} key={documental_category.id}>{documental_category.name}</Select.Option>
-                                )}
-                        </Select>
-                    </Form.Item>
-                    {loadingTeacherDocuments ? <Loading /> : <DocumentCategoryDocumentTable data={teacherDocuments} view={true} />}
-                </LayoutH>
+                <>
+                    <LayoutH>
+                        <Form.Item label={`Categoria documentos profesores`} labelAlign='left' span={12}>
+                            <Select 
+                                allowClear
+                                showSearch
+                                disabled={view || confirmLoading || loadingTeacherDocumentCategories}
+                                loading={loadingTeacherDocumentCategories}
+                                value={formState?.teacher_documental_category_id}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                onChange={(teacher_documental_category_id) => {
+                                    onInputChangeByName('teacher_documental_category_id', teacher_documental_category_id);
+                                    fetchTeacherDocumentsCategoryDocuments(teacher_documental_category_id);
+                                }}
+                            > 
+                                {teacher_documental_categories.map(documental_category => 
+                                    <Select.Option value={documental_category.id} key={documental_category.id}>{documental_category.name}</Select.Option>
+                                    )}
+                            </Select>
+                        </Form.Item>
+                    </LayoutH>
+                    <DocumentCategoryDocumentTable data={teacherDocuments} view={true} loading={loadingTeacherDocuments} />
+                </>
         }
     ];
     

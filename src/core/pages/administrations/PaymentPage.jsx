@@ -12,19 +12,30 @@ import { useForm } from '../../hooks/useForm';
 import { renderError } from '../../common/functions';
 import LayoutH from '../../components/layout/LayoutH';
 import TextArea from 'antd/es/input/TextArea';
+import Icon from '@ant-design/icons';
 
 export const PaymentPage = ({ app }) => {
 
     const [formState, setFormState] = useState(new Payment);    
     const [confirmLoading, setConfirmLoading] = useState(false);
-    const [loadingMethodsPayment, setLoadingMethodsPayment ] = useState([]);
+    const [loadingMethodsPayment, setLoadingMethodsPayment ] = useState(false);
     const [methodsPayment, setMethodsPayment ] = useState([]);
-    const [loadingStudents, setLoadingStudents ] = useState([]);
+    const [loadingStudents, setLoadingStudents ] = useState(false);
     const [students, setStudents ] = useState([]);
-    const [loadingCourses, setLoadingCourses ] = useState([]);
+    const [loadingCourses, setLoadingCourses ] = useState(false);
     const [courses, setCourses ] = useState([]);
     const [cuotess, setCuotes ] = useState([]);
-    
+    const [typingTimeout, setTypingTimeout] = useState(0);
+    const [searchUser, setSearchUser ] = useState([]);
+    const [openSelectUser, setOpenSelectUser] = useState(false);
+
+    useEffect(() => {
+        // Reabre el menú cuando se actualicen los datos de `students` y `openSelectUser` es true
+        if (students.length > 0 && openSelectUser) {
+            setOpenSelectUser(true);
+        }
+    }, [students]);
+
     const onOk = async() => {
         
         if(!formState.student_id || formState.student_id.length === 0){
@@ -104,10 +115,10 @@ export const PaymentPage = ({ app }) => {
         }
     };
 
-    const fetchStudents = async () => {
+    const fetchStudents = async (Search) => {
         setLoadingStudents(true);
         try {
-            const students = await userCombo({ User_type: 'student', State: 1});
+            const students = await userCombo({ Search, User_type: 'student', State: 1});
             setStudents(students);
             setLoadingStudents(false);
         } catch(err) {
@@ -130,7 +141,7 @@ export const PaymentPage = ({ app }) => {
 
     useEffect(() => {
         fetchMethodsPayment();
-        fetchStudents();
+        //fetchStudents();
     }, []);
 
     useEffect(() => {
@@ -199,18 +210,39 @@ export const PaymentPage = ({ app }) => {
                     <LayoutH>
                         <Form.Item label={`Estudiante *`} labelAlign='left' span={15}>
                             <Select
-                                allowClear
+                                key={`${students.length}`}
                                 showSearch
-                                disabled={confirmLoading || loadingStudents}
+                                disabled={confirmLoading}
                                 loading={loadingStudents}
                                 value={formState.student_id}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                onChange={student_id => setFormState({...formState, student_id})}
-                                > 
-                                    {students.map(student => 
-                                        <Select.Option value={student.id} key={student.id}>{student.names} {student.lastnames} - {student.document}</Select.Option>
-                                        )}
-                                </Select>
+                                open={openSelectUser}
+                                onDropdownVisibleChange={visible => setOpenSelectUser(visible)}
+                                onSearch={searchUser => {
+                                    setSearchUser(searchUser);
+                                    if (searchUser?.length > 2) {
+                                        if (typingTimeout) {
+                                            clearTimeout(typingTimeout);
+                                        }
+                                        setTypingTimeout(() => setTimeout(() => fetchStudents(searchUser), 1000));
+                                    } else {
+                                        setFormState({ ...formState, student_id: undefined });
+                                    }
+                                }}
+                                notFoundContent={
+                                    searchUser?.length > 2 && students.length === 0 && !loadingStudents
+                                        ? <>No hay resultados</>
+                                        : searchUser?.length > 2 && loadingStudents
+                                            ? <>Buscando...</>
+                                            : <><Icon type="search" /> Comience a escribir para buscar</>
+                                }
+                                onSelect={student_id => setFormState({ ...formState, student_id })}
+                            >
+                                {students.map(student => 
+                                    <Select.Option value={student.id} key={student.id}>
+                                        {`${student.names} ${student.lastnames} - ${student.document}`}
+                                    </Select.Option>
+                                )}
+                            </Select>
                         </Form.Item>
                         <Form.Item label={`Metodo de pago *`} labelAlign='left' span={9}>
                             <Select 

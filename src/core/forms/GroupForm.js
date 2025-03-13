@@ -15,6 +15,7 @@ import { DocumentCategoryDocumentTable } from '../tables/DocumentCategoryDocumen
 import { documentCategoryShow } from '../services/DocumentCategoryService';
 import dayjs from 'dayjs';
 import { AttendanceTable } from '../tables/AttendanceTable';
+import Icon from '@ant-design/icons';
 const { TextArea } = Input;
 
 export const GroupForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
@@ -30,6 +31,9 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
     let [students, setStudents] = useState([]);
     let [loadingStudents, setLoadingStudents] = useState(false);
     let [userStudentSelected, setUserStudentSelected] = useState(undefined);
+    const [typingTimeoutStudent, setTypingTimeoutStudent] = useState(0);
+    const [searchStudent, setSearchStudent ] = useState([]);
+    const [openSelectStudent, setOpenSelectStudent] = useState(false);
 
     let [teachers, setTeachers] = useState([]);
     let [loadingTeachers, setLoadingTeachers] = useState(false);
@@ -38,10 +42,17 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
     let [documents, setDocuments] = useState([]);
     let [loadingDocuments, setLoadingDocuments] = useState(false);
 
-    const fetchStudents = async () => {
+    useEffect(() => {
+        // Reabre el menú cuando se actualicen los datos de `students` y `openSelectStudent` es true
+        if (students.length > 0 && openSelectStudent) {
+            setOpenSelectStudent(true);
+        }
+    }, [students]);
+
+    const fetchStudents = async (Search) => {
         setLoadingStudents(true);
         try {
-            const students = await userCombo({User_type: 'student', State: 1});
+            const students = await userCombo({ Search, User_type: 'student', State: 1 });
             setStudents(students);
             setLoadingStudents(false);
         } catch (err) {
@@ -53,7 +64,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
     const fetchTeachers = async () => {
         setLoadingTeachers(true);
         try {
-            const teachers = await userCombo({User_type: 'teacher', State: 1});
+            const teachers = await userCombo({ User_type: 'teacher', State: 1 });
             setTeachers(teachers);
             setLoadingTeachers(false);
         } catch (err) {
@@ -121,6 +132,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
 
         formStateStudents.push(students.filter(student => student.id === userStudentSelected)[0]);
         onInputChangeByName('students', formStateStudents);
+        setUserStudentSelected(undefined);
     }
 
     const deleteStudent = (idStudent) => {
@@ -180,7 +192,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
     };
 
     useEffect(() => {
-        fetchStudents();
+        //fetchStudents();
         fetchTeachers();
         fetchTurns();
         fetchCourses();
@@ -264,18 +276,40 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                 <>
                     <LayoutH>
                         <Form.Item label={`Alumno`} labelAlign='left' span={12}>
-
                             <Select
-                                name='Alumno'
+                                key={`${students.length}`}
                                 allowClear
                                 showSearch
-                                disabled={view || confirmLoading || loadingStudents}
+                                name='Alumno'
+                                disabled={confirmLoading}
                                 loading={loadingStudents}
-                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                                onChange={userStudentSelected => setUserStudentSelected(userStudentSelected)}
+                                open={openSelectStudent}
+                                value={userStudentSelected}
+                                onDropdownVisibleChange={visible => setOpenSelectStudent(visible)}
+                                onSearch={searchUserStudent => {
+                                    setSearchStudent(searchUserStudent);
+                                    if (searchUserStudent?.length > 2) {
+                                        if (typingTimeoutStudent) {
+                                            clearTimeout(typingTimeoutStudent);
+                                        }
+                                        setTypingTimeoutStudent(() => setTimeout(() => fetchStudents(searchUserStudent), 1000));
+                                    } else {
+                                        setUserStudentSelected(undefined);
+                                    }
+                                }}
+                                notFoundContent={
+                                    searchStudent?.length > 2 && students.length === 0 && !loadingStudents
+                                        ? <>No hay resultados</>
+                                        : searchStudent?.length > 2 && loadingStudents
+                                            ? <>Buscando...</>
+                                            : <><Icon type="search" /> Comience a escribir para buscar</>
+                                }
+                                onSelect={userStudentSelected => setUserStudentSelected(userStudentSelected)}
                             >
-                                {students.map(student =>
-                                    <Select.Option key={student.id} value={student.id}>{student.names + " " + student.lastnames + " (" + student.document + ")"}</Select.Option>
+                                {students.map(student => 
+                                    <Select.Option value={student.id} key={student.id}>
+                                        {`${student.names} ${student.lastnames} - ${student.document}`}
+                                    </Select.Option>
                                 )}
                             </Select>
                         </Form.Item>
@@ -293,7 +327,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                 <>
                     <LayoutH>
                         <Form.Item label={`Profesor`} labelAlign='left' span={12}>
-                            <Select
+                        <Select
                                 allowClear
                                 showSearch
                                 disabled={view || confirmLoading || loadingTeachers}

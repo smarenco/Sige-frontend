@@ -40,7 +40,6 @@ export const GroupModal = (props) => {
             open={open}
             style={{top: 10}}
             width='100vw'
-            // height='10vh'
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'

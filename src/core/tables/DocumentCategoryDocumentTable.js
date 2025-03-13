@@ -1,7 +1,7 @@
 import { Table, Tag } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
-export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument, view }) => {
+export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument, view, loading = false }) => {
 
     const columns = () => {
         return [
@@ -41,6 +41,7 @@ export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument, view }) 
 
     return (
         <Table
+            loading={loading}
             columns={columns()}
             dataSource={[ ...data ]}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 280px)' }}

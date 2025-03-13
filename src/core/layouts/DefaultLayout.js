@@ -92,7 +92,7 @@ const DefaultLayout = ({ component, route, app, isMobile }) => {
                     return undefined;
                 }
                 i++;
-                console.log(r);
+                //console.log(r);
 
                 return {
                     key: r.key,

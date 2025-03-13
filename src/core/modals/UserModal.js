@@ -1,6 +1,6 @@
 import { Modal } from 'antd'
 import React from 'react'
-import { alertError, validatorInputsRequired } from '../common/functions';
+import { validatorInputsRequired } from '../common/functions';
 import { UserForm } from '../forms/UserForm';
 import { useForm } from '../hooks/useForm';
 
@@ -17,10 +17,15 @@ export const UserModal = (props) => {
             { name: 'names', text: 'Debe seleccionar un nombre'},
             { name: 'lastnames', text: 'Debe ingresar un apellido'},
             { name: 'birth_day', text: 'Debe ingresar una fecha de nacimiento'},
+            { name: 'gender', text: 'Debe seleccionar un genero'},
+            { name: 'country_id', text: 'Debe seleccionar un pais'},
+            { name: 'city_id', text: 'Debe seleccionar un ciudad'},
+            { name: 'location', text: 'Debe ingresar una localidad'},
             { name: 'cell_phone', text: 'Debe ingresar un telefono'},
             { name: 'email', text: 'Debe ingresar un email'},
             { name: 'medical_coverage_id', text: 'Debe seleccionar una cobertura medica'},
             { name: 'type', text: 'Debe seleccionar un tipo de usuario'},
+            { name: 'education_level', text: 'Debe seleccionar un nivel educativo'},
         ];
 
         if(validatorInputsRequired(formState, inputs)){
