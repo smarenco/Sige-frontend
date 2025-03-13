@@ -316,8 +316,9 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
             label: 'Documentos', 
             key: 'documents', 
             children: 
-            <>
-                <LayoutH>
+            <div>
+                hola
+                {/* <LayoutH>
                     {(formState?.type?.toLowerCase() === 'student' || formState?.type?.toLowerCase() === 'teacher') && <Form.Item label='Cursos' labelAlign='left' span={12}>
                         <Select 
                             allowClear
@@ -375,8 +376,8 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                                                             
                     }}
                     onCancel={() => { setOpenModalDocument(false); setDocumentToSee({}); }}
-                />
-            </>
+                /> */}
+            </div>
         },
         { 
             label: 'Cursos', 
