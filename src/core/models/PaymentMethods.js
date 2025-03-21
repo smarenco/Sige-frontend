@@ -15,11 +15,6 @@ export default class AbsenteeismCauses {
      */
     online = undefined;
 
-    /**
-     * @type {boolean}
-     */
-    associate = undefined;
-
     constructor(item) {
         for (let key in item) {
             this[key] = item[key];

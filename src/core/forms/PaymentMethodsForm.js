@@ -16,9 +16,6 @@ export const PaymentMethodsForm = ({ view, loading, confirmLoading, formState, o
                 <Form.Item labelAlign='left' span={5} style={{marginTop: 30}}>
                     <Checkbox name='online' disabled={view || confirmLoading} checked={formState?.online} onChange={(e) => onInputChangeByName('online', e.target.checked)}>Online</Checkbox>
                 </Form.Item>
-                <Form.Item labelAlign='left' span={5} style={{marginTop: 30}}>
-                    <Checkbox name='associate' disabled={view || confirmLoading} checked={formState?.associate} onChange={(e) => onInputChangeByName('associate', e.target.checked)}>Asociado</Checkbox>
-                </Form.Item>
             </LayoutH>
         </Form>
     )
