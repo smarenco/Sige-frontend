@@ -265,7 +265,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                     <Form.Item label={`${!view ? '*' : ''} Hasta`} labelAlign='left' span={5}>
                         <DatePicker name='finish_date' disabled={view || confirmLoading} onChange={(finish_date) => onInputChangeByName('finish_date', finish_date)} format={DDMMYYYY} value={formState?.finish_date ? dayjs(formState?.finish_date) : undefined} />
                     </Form.Item>
-                    <Form.Item label={`Descripcion`} labelAlign='left' span={24}>
+                    <Form.Item label={`${!view ? '*' : ''} Descripcion`} labelAlign='left' span={24}>
                         <TextArea name='description' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.description} />
                     </Form.Item>
                 </LayoutH>

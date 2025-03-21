@@ -15,13 +15,13 @@ export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument, view, lo
             }, {
                 title: 'Requerido',
                 key: 'Requerido',
-                render: (record) => <Tag color={!record.required ? 'green' : 'red'}>{!record.required ? 'Si' : 'No'}</Tag>,
+                render: (record) => <Tag color={record.required ? 'green' : 'red'}>{record.required ? 'Si' : 'No'}</Tag>,
                 width: 100,
                 ellipsis: true,
             }, {
                 title: 'Controla vencimiento',
                 key: 'expiration_control',
-                render: (record) => <Tag color={!record.expiration_control ? 'green' : 'red'}>{!record.expiration_control ? 'Si' : 'No'}</Tag>,
+                render: (record) => <Tag color={record.expiration_control ? 'green' : 'red'}>{record.expiration_control ? 'Si' : 'No'}</Tag>,
                 width: 150,
                 ellipsis: true,
             }, {

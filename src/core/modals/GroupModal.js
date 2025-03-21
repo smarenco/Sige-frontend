@@ -16,6 +16,7 @@ export const GroupModal = (props) => {
         
         const inputs = [
             { name: 'name', text: 'Debe ingresar el nombre'},
+            { name: 'description', text: 'Debe ingresarar una descripción'},
             { name: 'turn_id', text: 'Debe seleccionar un turno'},
             { name: 'course_id', text: 'Debe seleccionar un curso'},
             { name: 'institute_id', text: 'Debe seleccionar un instituto'},

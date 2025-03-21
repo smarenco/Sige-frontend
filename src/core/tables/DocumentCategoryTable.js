@@ -75,8 +75,8 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
                     <Button icon={<ReloadOutlined />} onClick={onReload} />
                     &nbsp;
                     <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
-                    &nbsp;
-                    <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked }, onReload)}>Ver eliminados</Checkbox>
+                    {/* &nbsp;
+                    <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked }, onReload)}>Ver eliminados</Checkbox> */}
                 </div>}
             pagination={{
                 style: paginationStyle,

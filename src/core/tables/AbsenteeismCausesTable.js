@@ -31,7 +31,7 @@ export const AbsenteeismCausesTable = ({ data, onReload, onRowSelectedChange, se
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {
-                title: 'Aplica falta',
+                title: 'Aplica ausentismo',
                 key: 'apply_absenteeism',
                 width: 250,
                 ellipsis: true,
