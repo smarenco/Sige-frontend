@@ -37,12 +37,6 @@ export const PaymentMethodsTable = ({ data, onReload, onRowSelectedChange, setFi
                 ellipsis: true,
                 render:(record) => <Tag color={record.online ? 'green' : 'red'}>{record.online ? 'Si' : 'No'}</Tag>,
             }, {
-                title: 'Asociado',
-                key: 'Asociado',
-                render: (record) => <Tag color={record.associate ? 'green' : 'red'}>{record.associate ? 'Si' : 'No'}</Tag>,
-                width: 150,
-                ellipsis: true,
-            }, {
                 title: 'Estado',
                 key: 'Estado',
                 render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
