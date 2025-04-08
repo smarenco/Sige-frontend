@@ -37,6 +37,8 @@ export const AttendanceListModal = (props) => {
     }
 
     useEffect(() => {
+        // console.log(students);
+        
         setStudents(students.map(r => ({ id: r.id, names: r.names, lastnames: r.lastnames, state: undefined, attendance_observation: undefined, justification: undefined })))
     }, [students]);
 

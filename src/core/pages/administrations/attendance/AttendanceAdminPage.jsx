@@ -60,10 +60,12 @@ export const AttendanceAdminPage = ({ app }) => {
     const handleOnGroupChange = (value) => {
         let auxGroup = groups.find(x => x.id == value)
         setGroup(auxGroup)
-        if(auxGroup)
-            //console.log(auxGroup);
+        if(auxGroup){
+            let auxStudents = auxGroup.students.map(e => ({...e, names: e.user.names, lastnames: e.user.lastnames}))
+            // console.log(auxStudents);
             
-            setStudents(auxGroup.students)
+            setStudents(auxStudents)
+        }
     }
 
     useEffect(()=>{
