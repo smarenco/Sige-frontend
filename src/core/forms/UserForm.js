@@ -66,11 +66,11 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     const fetchGroups = async () => {
         setLoadingGroups(true);
         try {
-            if(formState.id){
-                const groups = await groupCombo({ user_type: formState?.type?.toLowerCase(), user_id: formState?.id});
-                setGroups(groups);
-                setLoadingGroups(false);
-            }
+            // if(formState.id){
+            const groups = await groupCombo({ user_type: formState?.type?.toLowerCase(), user_id: formState?.id});
+            setGroups(groups);
+            setLoadingGroups(false);
+            // }
         } catch(err) { renderError(err); setLoadingGroups(false);}
     };
 
@@ -121,8 +121,16 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     useEffect(() => {
         fetchMedicalCoverages();
         fetchCountries();
-        fetchGroups();
+        if(formState?.id){
+            fetchGroups();
+        }
     }, []);
+
+    useEffect(() => {
+        if(formState?.type?.toLowerCase() == "student" || formState?.type?.toLowerCase() == "teacher"){
+            fetchGroups();
+        }
+    }, [formState.type])
 
     useEffect(() => {
         fetchCities(formState.country_id);
@@ -130,7 +138,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
 
     useEffect(() => {
         if(courseSelected){
-            fetchDocuments({ course_id: courseSelected });
+            fetchDocuments({ course_id: courseSelected, user_type: formState.type.toLowerCase() });
         }else{
             setDocuments([]);
         }
@@ -334,11 +342,10 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         { 
             label: 'Documentos', 
             key: 'documents',
-            disabled: !formState?.id,
+            // disabled: !formState?.id,
             children: 
             <div>
-                hola
-                {/* <LayoutH>
+                <LayoutH>
                     {(formState?.type?.toLowerCase() === 'student' || formState?.type?.toLowerCase() === 'teacher') && <Form.Item label='Cursos' labelAlign='left' span={12}>
                         <Select 
                             allowClear
@@ -396,13 +403,14 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                                                             
                     }}
                     onCancel={() => { setOpenModalDocument(false); setDocumentToSee({}); }}
-                /> */}
+                />
             </div>
         },
         { 
             label: 'Cursos', 
             key: 'courses',
-            disabled: !formState?.id || (formState?.type?.toLowerCase() !== 'student' && formState?.type?.toLowerCase() !== 'teacher'),
+            // disabled: !formState?.id || (formState?.type?.toLowerCase() !== 'student' && formState?.type?.toLowerCase() !== 'teacher'),
+            disabled: (formState?.type?.toLowerCase() !== 'student' && formState?.type?.toLowerCase() !== 'teacher'),
             children: 
             <>
                 <GroupTable
