@@ -61,8 +61,8 @@ export const AttendanceAdminPage = ({ app }) => {
         let auxGroup = groups.find(x => x.id == value)
         setGroup(auxGroup)
         if(auxGroup){
-            let auxStudents = auxGroup.students.map(e => ({...e, names: e.user.names, lastnames: e.user.lastnames}))
-            // console.log(auxStudents);
+            let auxStudents = auxGroup.students.map(e => ({...e, id: e.student_id, names: e.user.names, lastnames: e.user.lastnames}))
+            console.log(auxStudents);
             
             setStudents(auxStudents)
         }

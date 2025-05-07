@@ -1,4 +1,4 @@
-import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Select, Switch } from 'antd'
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, message, Select, Switch } from 'antd'
 import { useState, useEffect } from 'react';
 import Payment from '../../models/Payment';
 
@@ -89,6 +89,7 @@ export const PaymentPage = ({ app }) => {
             setConfirmLoading(true);
             try {
                 await paymentCreate(formState);
+                message.success("Pago creado con éxito");
                 setFormState(new Payment);
                 setCuotes([])
             } catch(err) {
