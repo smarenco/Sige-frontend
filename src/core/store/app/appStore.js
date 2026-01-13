@@ -1,4 +1,4 @@
-import { AimOutlined, ApartmentOutlined, BankOutlined, CarOutlined, ClockCircleOutlined, ContainerOutlined, ControlOutlined, CreditCardOutlined, DashboardOutlined, DollarCircleOutlined, ExceptionOutlined, FileOutlined, GoldOutlined, HddOutlined, HeartOutlined, HomeOutlined, IdcardOutlined, MedicineBoxOutlined, OrderedListOutlined, PayCircleOutlined, ScheduleOutlined, SettingOutlined, SolutionOutlined, TeamOutlined, UsergroupAddOutlined, UserOutlined } from '@ant-design/icons';
+import { AimOutlined, ApartmentOutlined, BankOutlined, CarOutlined, ClockCircleOutlined, ContainerOutlined, ControlOutlined, CreditCardOutlined, DashboardOutlined, DollarCircleOutlined, ExceptionOutlined, FileDoneOutlined, FileOutlined, GoldOutlined, HddOutlined, HeartOutlined, HighlightOutlined, HomeOutlined, IdcardOutlined, MedicineBoxOutlined, OrderedListOutlined, PayCircleOutlined, ScheduleOutlined, SettingOutlined, SolutionOutlined, TeamOutlined, UsergroupAddOutlined, UserOutlined } from '@ant-design/icons';
 import { createSlice } from '@reduxjs/toolkit';
 import { CONFIG } from '../../common/consts';
 import { AbsenteeismCausesPage } from '../../pages/administrations/AbsenteeismCausesPage';
@@ -23,6 +23,8 @@ import { AttendanceAdminPage } from '../../pages/administrations/attendance/Atte
 import { ConsultExpiredDocumentPage } from '../../pages/consults/ConsultExpiredDocumentPage';
 import { ConsultPaymentPage } from '../../pages/consults/ConsultPaymentPage';
 import { MyAttendancePage } from '../../pages/administrations/attendance/MyAttendancePage';
+import { EvaluationPage } from '../../pages/administrations/EvaluationPage';
+import { MyEvaluationsPage } from '../../pages/administrations/MyEvaluationPage';
 
 
 
@@ -50,6 +52,7 @@ export const appStore = createSlice({
             { key: 'adm-payment', name: 'Pagos', path: '/pago', component: PaymentPage },
             { key: 'adm-paymentMethods', name: 'Metodos de pago', path: '/metodos-pago', component: PaymentMethodsPage },
             { key: 'adm-group', name: 'Grupos', path: '/grupos', component: GroupPage },
+            { key: 'adm-evaluation', name: 'Evaluaciones', path: '/evaluaciones', component: EvaluationPage },
             { key: 'adm-document', name: 'Documentos', path: '/documentos', component: DocumentPage },
             { key: 'cons-consult-payment', name: 'Pagos', path: '/consulta-pagos', component: ConsultPaymentPage },
             { key: 'cons-expired-document', name: 'Documentacion con vencimiento', path: '/consulta-documentacion', component: ConsultExpiredDocumentPage },
@@ -60,6 +63,7 @@ export const appStore = createSlice({
             { key: 'attendance-teacher-lists', name:'Listas docentes', path: '/attendance/teacher-lists', component: AttendanceAdminPage },
             { key: 'attendance-admin', name:'Asistencia', path: '/attendance/admin', component: AttendanceAdminPage },
             { key: 'my-attendance', name:'Mi asistencia', path: '/my-attendance', component: MyAttendancePage },
+            { key: 'my-evaluation', name:'Mi evaluación', path: '/my-evaluation', component: MyEvaluationsPage },
             // /// Configuración
             // { key: 'auditoria', path: '/auditoria', component: Auditoria },
             // { key: 'auditoria-detail', path: '/auditoria/:id', component: AuditoriaDetalle, keysPage: ['id'] },
@@ -70,6 +74,7 @@ export const appStore = createSlice({
                 { key: 'home', to: '/', icon: <HomeOutlined />, title: 'Home'},
                 // { key: 'profile', to: '/perfil', icon: <SolutionOutlined />, title: 'Perfil'}, comentado porque ya esta en fotito de usuario
                 { key: 'my-attendance', to: '/my-attendance', icon: <OrderedListOutlined />, title: 'Mi asistencia'},
+                { key: 'my-evaluation', to: '/my-evaluation', icon: <FileDoneOutlined />, title: 'Mi evaluación'},
                 { key: 'IsDivider', IsDivider: true},
                 {
                     key: 'adm-administrations', icon: <HomeOutlined />, title: 'Administracion' , items: [
@@ -80,6 +85,7 @@ export const appStore = createSlice({
                         { key: 'adm-courses', to: '/cursos', icon: <ContainerOutlined />, title: 'Cursos'},
                         { key: 'adm-document', to: '/documentos', icon: <FileOutlined />, title: 'Documentos'},
                         { key: 'adm-group', to: '/grupos', icon: <GoldOutlined />, title: 'Grupos'},
+                        { key: 'adm-evaluation', to: '/evaluaciones', icon: <HighlightOutlined />, title: 'Evaluaciones'},
                         { key: 'adm-instituts', to: '/institutos', icon: <BankOutlined />, title: 'Institutos'},
                         { key: 'adm-paymentMethods', to: '/metodos-pago', icon: <CreditCardOutlined />, title: 'Metodos de pago'},
                         { key: 'adm-payment', to: '/pago', icon: <DollarCircleOutlined />, title: 'Pagos'},

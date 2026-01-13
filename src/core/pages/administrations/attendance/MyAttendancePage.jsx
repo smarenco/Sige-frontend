@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, DatePicker, Dropdown, Modal, Row, Select } from 'antd'
+import { Button, Card, Col, DatePicker, Dropdown, Modal, Row, Select } from 'antd'
 import { alertError, renderError } from '../../../common/functions';
 import { user } from '../../../services/AuthService';
 import { useEffect } from 'react';
@@ -18,31 +18,39 @@ export const MyAttendancePage = ({ app, isMobile }) => {
 
     const renderExtraTable = () => {
         return (
-            <Row>
-                <span style={{ margin: '15px 15px 15px 0px' }} span={24}>Mes de asistencia</span>
-                <DatePicker
-                    allowClear={false}
-                    placeholder='Seleccione un mes'
-                    style={{ marginRight: 10, width: isMobile ? '150px' : '200px', marginBottom: 10, marginTop: 10 }}
-                    disabled={loading}
-                    picker="month"
-                    format='MM/YYYY'
-                    value={attendanceMonth}
-                    onChange={setAttendanceMonth}
-                />
-                <Select
-                    allowClear
-                    value={group}
-                    disabled={loading}
-                    onChange={setGroup}
-                    style={{ marginRight: 10, width: isMobile ? '150px' : '200px', marginBottom: 10, marginTop: 10 }}
-                    placeholder='Grupos'
-                >
-                    {groups.map(group =>
-                        <Select.Option value={group.id} key={group.id}>{group.name}</Select.Option>
-                    )}
-                </Select>
-                <Button type='primary' disabled={group == undefined} style={{ margin: 10 }} onClick={loadData}>Buscar</Button>
+            <Row justify='space-between'>
+                <Col span={isMobile ? 24 : 5} style={{ margin: '15px 15px 15px 0px' }}>
+                    <span span={24}>Mes de asistencia</span>
+                </Col>
+                <Col span={isMobile ? 24 : 6}>
+                    <DatePicker
+                        allowClear={false}
+                        placeholder='Seleccione un mes'
+                        style={{ width: isMobile ? '100%' : '150px', marginRight: 25, marginBottom: 10, marginTop: 10 }}
+                        disabled={loading}
+                        picker="month"
+                        format='MM/YYYY'
+                        value={attendanceMonth}
+                        onChange={setAttendanceMonth}
+                        />
+                </Col>
+                <Col span={isMobile ? 24 : 6}>
+                    <Select
+                        allowClear
+                        value={group}
+                        disabled={loading}
+                        onChange={setGroup}
+                        style={{ marginRight: 10, width: isMobile ? '100%' : '150px', marginBottom: 10, marginTop: 10 }}
+                        placeholder='Grupos'
+                    >
+                        {groups.map(group =>
+                            <Select.Option value={group.id} key={group.id}>{group.name}</Select.Option>
+                        )}
+                    </Select>
+                </Col>
+                <Col span={isMobile ? 24 : 4}>
+                    <Button type='primary' disabled={group === undefined} style={{ margin: 10, float: 'right' }} onClick={loadData}>Buscar</Button>
+                </Col>
             </Row>
         );
     }

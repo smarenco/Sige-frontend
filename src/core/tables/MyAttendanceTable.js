@@ -37,8 +37,11 @@ export const MyAttendanceTable = ({ data: propAttendance, loading, uploadJustifi
             title: 'Acción',
             key: 'action',
             width: 80,
-            render: (text, record) => (
-                record.justification_id === null ?
+            render: (text, record) => {
+                console.log(record);
+                
+                return (
+                record.state == "Falta" && record.justification_id == null  ?
                     <Upload
                         onRemove={(file) => {
                             uploadJustification(undefined)
@@ -55,12 +58,19 @@ export const MyAttendanceTable = ({ data: propAttendance, loading, uploadJustifi
                         <Button icon={<PlusCircleOutlined />} />
                     </Upload>
                     :
-                    <Button
-                        type='default'
-                        icon={<DownloadOutlined />}
-                        onClick={() => downloadJustification(record?.justification_id)}
-                    />
-            ),
+                    (
+                        record.state == "Falta" && record.justification_id !== null ?
+                        <Button
+                            type='default'
+                            icon={<DownloadOutlined />}
+                            onClick={() => downloadJustification(record?.justification_id)}
+                        />
+                        :
+                        (
+                            <span>N/A</span>
+                        )
+                    )
+            )},
         },
     ];
 
