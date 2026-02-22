@@ -11,7 +11,7 @@ import { documentExpired, notifyExpiredDocument } from '../../services/UserServi
 
 export const ConsultExpiredDocumentPage = ({ app }) => {
 
-    const [filters, setFilters] = useState({ExpiredType: 'PorVencer'});
+    const [filters, setFilters] = useState({ExpiredType: 'PorVencer', CantidadDias: 15});
     const [data, setData] = useState([]);
     const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
     const [total, setTotal] = useState(0);
@@ -125,6 +125,7 @@ export const ConsultExpiredDocumentPage = ({ app }) => {
                             <Input
                                 value={filters.CantidadDias}
                                 disabled={loading}
+                                placeholder='Cantidad de dias'
                                 onChange={e => setFilters({ ...filters, CantidadDias: e.target.value })}
                             />
                         </Form.Item>
@@ -154,7 +155,7 @@ export const ConsultExpiredDocumentPage = ({ app }) => {
                             disabled={loading}
                             loading={loading}>Buscar</Button>
                         <Button
-                            style={{ marginLeft: '10px' }}
+                            style={{ marginLeft: '10px', marginTop: 10 }}
                             type='default'
                             onClick={() => documentExpired(filters, 'xls')}
                             disabled={loading}>Exportar a Excel</Button>            

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { DatePicker, Button, Table, Divider, Row, Col } from 'antd'
+import { DatePicker, Button, Table, Divider, Row, Col, Layout } from 'antd'
 import { Header } from 'antd/es/layout/layout';
 import { LeftCircleOutlined, PlusCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
 import { AttendanceListModal } from '../modals/AttendanceListModal';
@@ -52,6 +52,7 @@ export const AttendanceTable = ({ students = [], confirmLoading, group: propGrou
                 key: `${i}`,  // Aseguramos que la llave sea un string
                 dataIndex: `${i}`,  // Aseguramos que el dataIndex sea un string
                 width: 20,
+                style: { textAlign: 'center' },
                 ellipsis: true,
                 className: 'attendance-state',
                 render: (r, t) => t[i] && renderAttendanceState({ ...t[i], day: i, id: t.student_id, name: t.student_name })
@@ -139,11 +140,12 @@ export const AttendanceTable = ({ students = [], confirmLoading, group: propGrou
     }, [attendanceMonth]);
 
     return (
-        <div style={{ height: '100%' }}>
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <Header style={{
                 backgroundColor: 'white',
                 paddingInline: 15,
-                lineHeight: 0
+                lineHeight: 0,
+                flexShrink: 0
             }}>
                 <Row>
                     <Col span={18}>
@@ -176,17 +178,19 @@ export const AttendanceTable = ({ students = [], confirmLoading, group: propGrou
                         <Button onClick={() => handleMonthChange(attendanceMonth.add(1, 'month'), true)} disabled={confirmLoading || loadingAttendance || group == undefined} icon={<RightCircleOutlined />} style={{ float: 'right' }}>Mes siguiente</Button>
                     </Col>
                 </Row>
-                {/* <div style={{}}>
-                </div> */}
             </Header>
-            <Table
-                key='student_id'
-                size='small'
-                style={{ paddingTop: modalMode ? 10 : 50 }}
-                columns={attendanceColumns()}
-                dataSource={attendance}
-                loading={confirmLoading || loadingAttendance}
-            />
+            <div style={{ padding: 15, overflow: 'auto', maxHeight: '60vh' }}>
+                <Table
+                    rowKey="student_id"
+                    size="small"
+                    style={{ paddingTop: modalMode ? 10 : 50 }}
+                    columns={attendanceColumns()}
+                    dataSource={attendance}
+                    loading={confirmLoading || loadingAttendance}
+                    pagination={false}
+                    scroll={{ y: 450 }}
+                />
+            </div>
             <AttendanceListModal
                 open={modalAttendanceList}
                 loading={confirmLoading || loadingAttendance}

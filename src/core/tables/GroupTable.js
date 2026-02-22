@@ -33,6 +33,13 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
                 render: r => <Button type='link' onClick={e => onEditClick(r.id)}>{r.name}</Button>,
                 className: 'ant-table-cell-link',
             }, {
+                title: 'Cant. Estudiantes',
+                key: 'cant_students',
+                dataIndex: 'number_students',
+                width: 145,
+                render: r => <span style={{fontWeight: 'bold'}}>{r}</span>,
+                className: 'ant-table-cell-link',
+            }, {
                 title: 'Curso',
                 dataIndex: 'course_name',
                 key: 'Curso',
@@ -101,7 +108,7 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
                 showTotal: (total, range) => `${range[0]}-${range[1]} de ${total} elementos`,
                 ...pagination,
             }}
-            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 280px)' }}
+            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(65vh)' }}
             rowKey={record => record.getId()}
             onRow={r => !comeUserForm && ({ onDoubleClick: () => onEditClick(r.id) })}
             
